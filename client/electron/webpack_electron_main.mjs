@@ -21,7 +21,7 @@ import webpack from 'webpack';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export default ({sentryDsn, appVersion}) => [
+export default ({sentryDsn, appVersion, output}) => [
   {
     entry: './client/electron/index.ts',
     target: 'electron-main',
@@ -50,7 +50,7 @@ export default ({sentryDsn, appVersion}) => [
     ],
     output: {
       filename: 'index.js',
-      path: path.resolve(__dirname, '..', '..', 'output', 'client', 'electron'),
+      path: output 
     },
   },
   {
@@ -71,7 +71,7 @@ export default ({sentryDsn, appVersion}) => [
     },
     output: {
       filename: 'preload.js',
-      path: path.resolve(__dirname, '..', '..', 'output', 'client', 'electron'),
+      path: path.resolve(__dirname, '..', '..', 'output', 'client', 'electron', 'js'),
     },
   },
 ];

@@ -23,7 +23,7 @@ import {getBuildParameters} from '../src/build/get_build_parameters.mjs';
 import {getWebpackBuildMode} from '../src/build/get_webpack_build_mode.mjs';
 import {runWebpack} from '../src/build/run_webpack.mjs';
 
-const ELECTRON_BUILD_DIR = 'output';
+const ELECTRON_BUILD_DIR = 'output/client/electron';
 const ELECTRON_PLATFORMS = ['linux', 'windows'];
 
 export async function main(...parameters) {
@@ -41,7 +41,11 @@ export async function main(...parameters) {
 
   // TODO(daniellacosse): separate building the preload script out into its own separate step
   await runWebpack(
-    electronMainWebpackConfigs({sentryDsn, appVersion: versionName}).map(config => ({
+    electronMainWebpackConfigs({
+      sentryDsn,
+      appVersion: versionName,
+      output: path.resolve(getRootDir(), ELECTRON_BUILD_DIR, 'js'),
+    }).map(config => ({
       ...config,
       mode: getWebpackBuildMode(buildMode),
     }))
@@ -58,7 +62,8 @@ export async function main(...parameters) {
       windowsEnvironment += `\n!define SENTRY_URL "<debug>"`;
     }
 
-    await fs.writeFile(path.resolve(getRootDir(), ELECTRON_BUILD_DIR, 'client', 'electron', 'env.nsh'), windowsEnvironment);
+    await fs.mkdir(path.resolve(getRootDir(), ELECTRON_BUILD_DIR, platform), {recursive: true});
+    await fs.writeFile(path.resolve(getRootDir(), ELECTRON_BUILD_DIR, platform, 'env.nsh'), windowsEnvironment);
   }
 }
 

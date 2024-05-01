@@ -1,25 +1,20 @@
 {
   "artifactName": "Outline-Client.${ext}",
   "asarUnpack": [ "client" ],
-  "directories": {
-    "buildResources": "output/client/electron",
-    "output": "output/client/electron/build"
-  },
   "extraMetadata": {
-    "main": "output/client/electron/index.js"
+    "main": "output/client/electron/js/index.js"
   },
   "files": [
     "client/www",
     "client/resources/tray",
-    "output/client/electron",
-    "!output/client/electron/build"
+    "output/client/electron/js"
   ],
   "linux": {
     "category": "Network",
     "files": [
       "client/electron/linux_proxy_controller/dist",
       "client/electron/icons/png",
-      "client/output/build/linux"
+      "output/client/electron/linux"
     ],
     "icon": "client/electron/icons/png",
     "target": {
@@ -35,7 +30,7 @@
   },
   "win": {
     "files": [
-      "client/output/build/windows"
+      "output/client/electron/windows"
     ],
     "icon": "client/electron/icons/win/icon.ico",
     "sign": "client/electron/windows/electron_builder_signing_plugin.cjs",

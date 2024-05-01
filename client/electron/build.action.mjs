@@ -23,7 +23,7 @@ import {getRootDir} from '../../src/build/get_root_dir.mjs';
 import {runAction} from '../../src/build/run_action.mjs';
 import {getBuildParameters} from '../src/build/get_build_parameters.mjs';
 
-const ELECTRON_BUILD_DIR = 'output';
+const ELECTRON_BUILD_DIR = 'output/client/electron';
 const ELECTRON_PLATFORMS = ['linux', 'windows'];
 
 export async function main(...parameters) {
@@ -53,8 +53,6 @@ export async function main(...parameters) {
   await runAction('client/src/tun2socks/build', ...parameters);
   await runAction('client/electron/build_main', ...parameters);
 
-  await fs.mkdir(path.join(getRootDir(), ELECTRON_BUILD_DIR, 'client', 'electron'), {recursive: true});
-
   const electronConfig = JSON.parse(
     await fs.readFile(path.resolve(getRootDir(), 'client', 'electron', 'electron-builder.json'))
   );
@@ -65,6 +63,9 @@ export async function main(...parameters) {
     targets: Platform[platform.toLocaleUpperCase()].createTarget(),
     config: {
       ...electronConfig,
+      directories: {
+        output: path.resolve(getRootDir(), ELECTRON_BUILD_DIR, platform),
+      },  
       publish: autoUpdateUrl
         ? {
             provider: autoUpdateProvider,
